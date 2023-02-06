@@ -8,18 +8,22 @@ function App() {
   const [processes, setProcesses] = useState([]);
   const [averageWaitingTime, setAverageWaitingTime] = useState(0);
   const [averageTurnaroundTime, setAverageTurnaroundTime] = useState(0);
-  const [waitingTimes, setWaitingTimes] = useState([]);
-  const [turnaroundTimes, setTurnaroundTimes] = useState([]);
+  const [waitingTimes, setWaitingTimes] = useState([0]);
+  const [turnaroundTimes, setTurnaroundTimes] = useState([0]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const tempWaitingTime = [waitingTimes];
-    const tempTurnaroundTime = [turnaroundTimes];
+    console.log(processes);
+    let tempWaitingTime = [waitingTimes];
+    let tempTurnaroundTime = [turnaroundTimes];
+    tempWaitingTime[0] = 0;
+    tempTurnaroundTime[0] = Number(processes[0].burstTime);
+    console.log(tempWaitingTime, tempTurnaroundTime);
     let waitingTimeSum = 0;
     let turnaroundTimeSum = 0;
     for (let i = 1; i < processes.length; i++) {
-      tempWaitingTime[i] = tempWaitingTime[i - 1] + Number(processes.burstTime[i - 1]);
-      tempTurnaroundTime[i] = tempTurnaroundTime[i - 1] + Number(processes.burstTime[i]);
+      tempWaitingTime[i] = tempWaitingTime[i - 1] + Number(processes[i - 1].burstTime);
+      tempTurnaroundTime[i] = tempTurnaroundTime[i - 1] + Number(processes[i].burstTime);
       waitingTimeSum += tempWaitingTime[i];
       turnaroundTimeSum += tempTurnaroundTime[i];
     }
@@ -35,7 +39,7 @@ function App() {
     setProcesses(updatedProcesses);
   };
   const handleAddProcess = () => {
-    setProcesses([...processes, { processId: "", burstTime: ""}]);
+    setProcesses([...processes, { processId: "", burstTime: []}]);
   };
 
 
